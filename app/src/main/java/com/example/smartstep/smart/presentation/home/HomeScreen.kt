@@ -20,7 +20,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.rememberDrawerState
@@ -41,8 +40,11 @@ import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 import com.example.smartstep.core.presentation.util.ObserveAsEvents
 import com.example.smartstep.core.presentation.util.isIgnoringBatteryOptimizations
 import com.example.smartstep.smart.presentation.home.HomeAction.OnSetPermission
+import com.example.smartstep.smart.presentation.home.components.HomeAdaptiveBackgroundAccess
+import com.example.smartstep.smart.presentation.home.components.HomeAdaptiveFirstPermissionDialog
+import com.example.smartstep.smart.presentation.home.components.HomeAdaptiveSecondPermissionDialog
+import com.example.smartstep.smart.presentation.home.components.HomeAdaptiveStepGoal
 import com.example.smartstep.smart.presentation.home.components.HomeBackgroundAccess
-import com.example.smartstep.smart.presentation.home.components.HomeBottomSheet
 import com.example.smartstep.smart.presentation.home.components.HomeDialog
 import com.example.smartstep.smart.presentation.home.components.HomeExit
 import com.example.smartstep.smart.presentation.home.components.HomeFirstPermissionDialog
@@ -113,10 +115,7 @@ fun HomeScreenRoot(
     }
 
     LaunchedEffect(Unit) {
-        motionPermissionResultLauncher.launch(
-            permission
-        )
-
+        motionPermissionResultLauncher.launch(permission)
     }
 
     ObserveAsEvents(viewModel.events) { event ->
@@ -135,38 +134,6 @@ fun HomeScreenRoot(
         }
     }
 
-    val firstPermissionDialog = @Composable {
-        HomeFirstPermissionDialog(
-            onClick = {
-                motionPermissionResultLauncher.launch(permission)
-            }
-        )
-    }
-
-    val secondPermissionDialog = @Composable {
-        HomeSecondPermissionDialog(
-            onClick = {
-                val intent = Intent(
-                    ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts("package", context.packageName, null)
-                )
-                settingsLauncher.launch(intent)
-            }
-        )
-    }
-
-    val backgroundAccessDialog = @Composable {
-        HomeBackgroundAccess(
-            onClick = {
-                val intent = Intent(
-                    ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                    Uri.fromParts("package", context.packageName, null)
-                )
-                ignoringBatteryOptimizationsLauncher.launch(intent)
-            }
-        )
-    }
-
     HomeScreen(
         goal = state.goal,
         steps = state.steps,
@@ -177,112 +144,74 @@ fun HomeScreenRoot(
 
     when (state.permission) {
         Permission.FIRST_DENIAL -> {
-            if (windowSizeClass.minWidthDp >= 840)
-                HomeDialog(
-                    onDismissRequest = {}
-                ) {
-                    firstPermissionDialog()
-                }
-            else
-                HomeBottomSheet(
-                    onDismiss = {},
-                    dragHandle = null,
-                    sheetGesturesEnabled = false,
-                    properties = ModalBottomSheetProperties(
-                        shouldDismissOnBackPress = false,
-                        shouldDismissOnClickOutside = false
-                    ),
-                ) {
-                    firstPermissionDialog()
-                }
+            HomeAdaptiveFirstPermissionDialog(
+                windowSizeClass = windowSizeClass
+            ) {
+                HomeFirstPermissionDialog(
+                    onClick = {
+                        motionPermissionResultLauncher.launch(permission)
+                    }
+                )
+            }
         }
 
         Permission.SECOND_DENIAL -> {
-            if (windowSizeClass.minWidthDp >= 840)
-                HomeDialog(
-                    onDismissRequest = {}
-                ) {
-                    secondPermissionDialog()
-                }
-            else
-                HomeBottomSheet(
-                    onDismiss = {},
-                    dragHandle = null,
-                    sheetGesturesEnabled = false,
-                    properties = ModalBottomSheetProperties(
-                        shouldDismissOnBackPress = false,
-                        shouldDismissOnClickOutside = false
-                    ),
-                ) {
-                    secondPermissionDialog()
-                }
+            HomeAdaptiveSecondPermissionDialog(
+                windowSizeClass = windowSizeClass
+            ) {
+                HomeSecondPermissionDialog(
+                    onClick = {
+                        val intent = Intent(
+                            ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.fromParts("package", context.packageName, null)
+                        )
+                        settingsLauncher.launch(intent)
+                    }
+                )
+            }
         }
 
         Permission.ALLOWED_MOTION_SENSORS -> {
             viewModel.onAction(HomeAction.OnStartStepSensor)
             if (!isIgnoringBatteryOptimizations(context) && !state.isBackgroundAccessEnabled) {
-                if (windowSizeClass.minWidthDp >= 840)
-                    HomeDialog(
-                        onDismissRequest = {
-                            viewModel.onAction(HomeAction.OnBackgroundAccessDisabled)
-                        },
-                        onClose = {
-                            viewModel.onAction(HomeAction.OnBackgroundAccessDisabled)
+                HomeAdaptiveBackgroundAccess(
+                    windowSizeClass = windowSizeClass,
+                    onDismiss = {
+                        viewModel.onAction(HomeAction.OnBackgroundAccessDisabled)
+                    },
+                    onClose = {
+                        viewModel.onAction(HomeAction.OnBackgroundAccessDisabled)
+                    }
+                ) {
+                    HomeBackgroundAccess(
+                        onClick = {
+                            val intent = Intent(
+                                ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                                Uri.fromParts("package", context.packageName, null)
+                            )
+                            ignoringBatteryOptimizationsLauncher.launch(intent)
                         }
-                    ) {
-                        backgroundAccessDialog()
-                    }
-                else
-                    HomeBottomSheet(
-                        onDismiss = {
-                            viewModel.onAction(HomeAction.OnBackgroundAccessDisabled)
-                        },
-                    ) {
-                        backgroundAccessDialog()
-                    }
+                    )
+                }
             }
         }
 
         else -> {}
     }
 
-    val stepGoalContent = @Composable {
-        HomeStepGoal(
-            items = stepGoalItems,
-            selected = state.goalSelected,
-            onSelected = {
-                viewModel.onAction(HomeAction.OnStepGoalSelected(it))
-            },
-            onSaveClick = {
-                viewModel.onAction(HomeAction.OnStepGoalSave)
-            },
-            onCancelClick = {
-                viewModel.onAction(HomeAction.OnStepGoalCancel)
-            }
-        )
-    }
-
     if (state.isGoalPickerVisible)
-        if (windowSizeClass.minWidthDp >= 840)
-            HomeDialog(
-                onDismissRequest = { },
-            ) {
-                stepGoalContent()
-            }
-        else
-            HomeBottomSheet(
-                dragHandle = null,
-                sheetGesturesEnabled = false,
-                properties = ModalBottomSheetProperties(
-                    shouldDismissOnBackPress = false,
-                    shouldDismissOnClickOutside = false
-                ),
-                onDismiss = {
-                    viewModel.onAction(HomeAction.OnStepGoalCancel)
-                },
-            ) {
-                stepGoalContent()
-            }
+        HomeAdaptiveStepGoal(
+            onDismiss = { },
+            windowSizeClass = windowSizeClass
+        ) {
+            HomeStepGoal(
+                items = stepGoalItems,
+                selected = state.goalSelected,
+                onSelected = { viewModel.onAction(HomeAction.OnStepGoalSelected(it)) },
+                onSaveClick = { viewModel.onAction(HomeAction.OnStepGoalSave) },
+                onCancelClick = { viewModel.onAction(HomeAction.OnStepGoalCancel) }
+            )
+        }
 
     if (state.isExitDialogVisible)
         HomeDialog(
