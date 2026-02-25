@@ -1,4 +1,4 @@
-package com.example.smartstep.smart.presentation.profile.models
+package com.example.smartstep.smart.presentation.models
 
 import com.example.smartstep.R
 import com.example.smartstep.core.presentation.util.UiText

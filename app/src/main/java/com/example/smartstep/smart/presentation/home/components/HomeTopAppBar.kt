@@ -28,7 +28,7 @@ fun HomeTopAppBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(R.string.header_text),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary
             )

@@ -3,7 +3,7 @@ package com.example.smartstep.smart.presentation.profile
 import com.example.smartstep.R
 import com.example.smartstep.core.presentation.util.UiText
 import com.example.smartstep.smart.presentation.profile.models.Gender
-import com.example.smartstep.smart.presentation.profile.models.Units
+import com.example.smartstep.smart.presentation.models.Units
 import com.example.smartstep.smart.presentation.util.convertCmToFeetInches
 import com.example.smartstep.smart.presentation.util.convertKgToLbs
 

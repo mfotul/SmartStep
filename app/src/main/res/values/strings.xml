@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Smart Step</string>
+    <string name="app_name">Smart Step Counter</string>
+    <string name="header_text">Smart Step</string>
     <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
     <string name="my_profile">My profile</string>
@@ -37,4 +38,15 @@
     <string name="number_ft_in">%d ft %d in</string>
     <string name="number_lbs">%d lbs</string>
     <string name="the_app_will_fully_close_and_will_not_run_in_the_background">The app will fully close and will not run in the background.</string>
+    <string name="fix_the_stop_counting_steps_issue">Fix the “Stop Counting Steps” issue</string>
+    <string name="personal_settings">Personal Settings</string>
+    <string name="edit_steps">Edit Steps</string>
+    <string name="reset_today_s_steps">Reset Today’s Steps</string>
+    <string name="steps_label">Steps</string>
+    <string name="date">Date</string>
+    <string name="calories_distance_duration"><![CDATA[Calories, distance & duration will be recalculated accordingly.]]></string>
+    <string name="paused">Paused</string>
+    <string name="km">km</string>
+    <string name="mi">mi</string>
+    <string name="daily_average">Daily average: %s steps</string>
 </resources>

@@ -20,12 +20,15 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.example.smartstep.R
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 import com.example.smartstep.smart.presentation.home.HomeAction
+import com.example.smartstep.smart.presentation.home.models.Dialog
 
 @Composable
 fun HomeNavigationDrawer(
@@ -48,12 +51,12 @@ fun HomeNavigationDrawer(
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
-                ){
+                ) {
                     if (isBackgroundAccessEnabled) {
                         NavigationDrawerItem(
                             label = {
                                 Text(
-                                    text = "Fix the “Stop Counting Steps” issue",
+                                    text = stringResource(R.string.fix_the_stop_counting_steps_issue),
                                     style = MaterialTheme.typography.headlineLarge,
                                     fontWeight = FontWeight(500),
                                 )
@@ -66,25 +69,49 @@ fun HomeNavigationDrawer(
                     NavigationDrawerItem(
                         label = {
                             Text(
-                                text = "Step Goal",
+                                text = stringResource(R.string.step_goal),
                                 style = MaterialTheme.typography.headlineLarge,
                                 fontWeight = FontWeight(500),
                             )
                         },
                         selected = false,
-                        onClick = { onAction(HomeAction.OnStepGoalClick) }
+                        onClick = { onAction(HomeAction.OnDialogOpen(Dialog.GOAL_PICKER)) }
                     )
                     HorizontalDivider()
                     NavigationDrawerItem(
                         label = {
                             Text(
-                                text = "Personal Settings",
+                                text = stringResource(R.string.personal_settings),
                                 style = MaterialTheme.typography.headlineLarge,
                                 fontWeight = FontWeight(500),
                             )
                         },
                         selected = false,
                         onClick = { onAction(HomeAction.OnPersonalSettingsClick) }
+                    )
+                    HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                text = stringResource(R.string.edit_steps),
+                                style = MaterialTheme.typography.headlineLarge,
+                                fontWeight = FontWeight(500),
+                            )
+                        },
+                        selected = false,
+                        onClick = { onAction(HomeAction.OnDialogOpen(Dialog.EDIT_STEPS)) }
+                    )
+                    HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                text = stringResource(R.string.reset_today_s_steps),
+                                style = MaterialTheme.typography.headlineLarge,
+                                fontWeight = FontWeight(500),
+                            )
+                        },
+                        selected = false,
+                        onClick = { onAction(HomeAction.OnDialogOpen(Dialog.RESET_TODAY_STEPS)) }
                     )
                     HorizontalDivider()
                     NavigationDrawerItem(
@@ -99,7 +126,7 @@ fun HomeNavigationDrawer(
                             unselectedTextColor = MaterialTheme.colorScheme.primary
                         ),
                         selected = false,
-                        onClick = { onAction(HomeAction.OnMenuExitClick) }
+                        onClick = { onAction(HomeAction.OnDialogOpen(Dialog.EXIT)) }
                     )
                 }
             }

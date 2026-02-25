@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartstep.R
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
+import com.example.smartstep.core.presentation.designsystem.theme.borderColor
 
 @Composable
 fun SmartTextField(
@@ -39,7 +40,7 @@ fun SmartTextField(
             )
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.borderColor,
                 shape = RoundedCornerShape(10)
             )
             .padding(horizontal = 16.dp, vertical = 8.dp)

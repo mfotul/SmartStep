@@ -40,13 +40,13 @@ import com.example.smartstep.R
 import com.example.smartstep.core.presentation.designsystem.buttons.PrimaryButton
 import com.example.smartstep.core.presentation.designsystem.dropdowns.PopUpDropDownMenu
 import com.example.smartstep.core.presentation.designsystem.fields.SmartTextField
-import com.example.smartstep.core.presentation.designsystem.pickerdialogs.PickerDialog
+import com.example.smartstep.smart.presentation.profile.components.HeightWeightDialog
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 import com.example.smartstep.core.presentation.util.ObserveAsEvents
 import com.example.smartstep.smart.presentation.profile.components.ProfileTopAppBar
 import com.example.smartstep.smart.presentation.profile.models.Gender
-import com.example.smartstep.smart.presentation.profile.models.UnitType
-import com.example.smartstep.smart.presentation.profile.models.Units
+import com.example.smartstep.smart.presentation.models.UnitType
+import com.example.smartstep.smart.presentation.models.Units
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -170,13 +170,11 @@ fun ProfileScreen(
                     }
                     SmartTextField(
                         label = stringResource(R.string.height),
-//                        value = stringResource(R.string.number_cm, state.height),
                         value = state.formattedHeight.asString(),
                         onClick = { onAction(ProfileAction.OnHeightClick) }
                     )
                     SmartTextField(
                         label = stringResource(R.string.weight),
-//                        value = stringResource(R.string.number_kg, state.weight),
                         value = state.formattedWeight.asString(),
                         onClick = { onAction(ProfileAction.OnWeightClick) }
                     )
@@ -197,7 +195,7 @@ fun ProfileScreen(
     }
 
     if (state.isHeightDialogVisible)
-        PickerDialog(
+        HeightWeightDialog(
             titleResId = R.string.height,
             descriptionResId = R.string.used_to_calculate_distance,
             units = Units.entries.filter { it.unitType == UnitType.HEIGHT },
@@ -219,7 +217,7 @@ fun ProfileScreen(
             unit2ResId = if (state.heightUnit == Units.FT) R.string.inches else null
         )
     if (state.isWeightDialogVisible)
-        PickerDialog(
+        HeightWeightDialog(
             titleResId = R.string.weight,
             descriptionResId = R.string.used_to_calculate_calories,
             units = Units.entries.filter { it.unitType == UnitType.WEIGHT },

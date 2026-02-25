@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,7 +42,9 @@ fun PickerColumn(
     selected: Int,
     onSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    @StringRes unitResId: Int? = null
+    @StringRes unitResId: Int? = null,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceEvenly,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     val lazyListState = rememberLazyListState()
     val hapticFeedback = LocalHapticFeedback.current
@@ -94,6 +97,7 @@ fun PickerColumn(
         state = lazyListState,
         horizontalAlignment = Alignment.CenterHorizontally,
         flingBehavior = snapFlingBehavior,
+        contentPadding = contentPadding,
         modifier = modifier
             .fillMaxWidth()
             .height(200.dp)
@@ -108,7 +112,7 @@ fun PickerColumn(
         items(items = items, key = { it }) { item ->
             val selected = item == selectedItem
             Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = horizontalArrangement,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,7 +147,9 @@ private fun PickerColumnPreview() {
             items = (100..220).toList(),
             selected = 103,
             onSelected = {},
-            unitResId = R.string.ft
+            unitResId = null,
+            horizontalArrangement = Arrangement.Start,
+            contentPadding = PaddingValues(start = 16.dp)
         )
     }
 }

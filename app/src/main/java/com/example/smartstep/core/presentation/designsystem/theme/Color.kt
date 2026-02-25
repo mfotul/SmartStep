@@ -1,5 +1,6 @@
 package com.example.smartstep.core.presentation.designsystem.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 val PrimaryColor = Color(0xFF3A43B6) // Button/Primary
@@ -13,7 +14,8 @@ val SurfaceContainerHighestColor = Color(0xFFFFFFFF) // Background/White
 val SurfaceContainerLowColor = Color(0x33FFFFFF) // Background/White_20_percent
 val SurfaceColor = Color(0xFFE5E7EB) //Stroke/Main
 val TertiaryColor = Color(0x29101828) // Color/Tertiary
+val BorderColor = Color(0xFFD1D1D1)
 
-
-
+val ColorScheme.borderColor: Color
+    get() = BorderColor
 

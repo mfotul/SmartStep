@@ -1,7 +1,7 @@
 package com.example.smartstep.smart.presentation.profile
 
 import com.example.smartstep.smart.presentation.profile.models.Gender
-import com.example.smartstep.smart.presentation.profile.models.Units
+import com.example.smartstep.smart.presentation.models.Units
 
 sealed interface ProfileAction {
     data class OnCancel(val units: Units) : ProfileAction

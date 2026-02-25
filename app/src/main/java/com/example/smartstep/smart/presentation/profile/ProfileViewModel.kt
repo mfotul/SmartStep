@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartstep.settings.domain.Profile
 import com.example.smartstep.settings.domain.SettingPreferences
 import com.example.smartstep.smart.presentation.profile.models.Gender
-import com.example.smartstep.smart.presentation.profile.models.Units
+import com.example.smartstep.smart.presentation.models.Units
 import com.example.smartstep.smart.presentation.util.convertCmToFeetInches
 import com.example.smartstep.smart.presentation.util.convertFeetInchesToCm
 import com.example.smartstep.smart.presentation.util.convertKgToLbs

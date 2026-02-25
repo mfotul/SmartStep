@@ -1,4 +1,4 @@
-package com.example.smartstep.smart.presentation.home.components
+package com.example.smartstep.core.presentation.designsystem.progress_indicator
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth

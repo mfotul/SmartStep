@@ -1,4 +1,4 @@
-package com.example.smartstep.core.presentation.designsystem.pickerdialogs
+package com.example.smartstep.smart.presentation.profile.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -26,10 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.smartstep.R
+import com.example.smartstep.core.presentation.designsystem.pickerdialogs.PickerColumn
+import com.example.smartstep.core.presentation.designsystem.pickerdialogs.UnitSwitch
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 
 @Composable
-fun <T> PickerDialog(
+fun <T> HeightWeightDialog(
     @StringRes titleResId: Int,
     @StringRes descriptionResId: Int,
     units: List<T>,
@@ -145,14 +147,14 @@ fun <T> PickerDialog(
 
 @Preview(widthDp = 860)
 @Composable
-fun PickerDialogPreview() {
+fun HeightWeightDialogPreview() {
     SmartStepTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            PickerDialog(
+            HeightWeightDialog(
                 titleResId = R.string.height,
                 descriptionResId = R.string.used_to_calculate_distance,
                 units = listOf("cm", "ft/in"),
