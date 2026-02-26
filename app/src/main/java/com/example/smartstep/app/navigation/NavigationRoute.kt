@@ -10,5 +10,5 @@ sealed interface NavigationRoute: NavKey {
     data object ProfileScreen: NavigationRoute, NavKey
 
     @Serializable
-    data object HomeScreen: NavigationRoute, NavKey
+    data object StepScreen: NavigationRoute, NavKey
 }

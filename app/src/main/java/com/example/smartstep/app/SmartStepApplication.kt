@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import com.example.smartstep.app.di.appModule
+import com.example.smartstep.core.database.di.databaseModule
 import com.example.smartstep.smart.di.smartModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,8 @@ class SmartStepApplication : Application() {
             androidContext(this@SmartStepApplication)
             modules(
                 appModule,
-                smartModule
+                smartModule,
+                databaseModule
             )
         }
     }

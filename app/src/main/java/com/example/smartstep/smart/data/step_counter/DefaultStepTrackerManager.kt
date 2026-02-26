@@ -26,12 +26,12 @@ class DefaultStepTrackerManager(
     override val data = combine(
         _data,
         settingPreferences.observeProfileSettings(),
-        settingPreferences.observeGoal()
+        settingPreferences.observeGoal(),
     ) { data, profile, goal ->
         Triple(data, profile, goal)
     }.scan(MetricAccumulator()) { accumulator, (data, profile, goal) ->
         val shouldRecalculate = accumulator.lastCalculatedSteps == -1f ||
-                (accumulator.lastCalculatedSteps + 10 < data.steps)
+                (accumulator.lastCalculatedSteps + 10 < data.steps || accumulator.lastCalculatedSteps - 10 > data.steps)
 
         if (shouldRecalculate) {
             val (newDistance, newCalories) = calculateActivityMetrics(data.steps, profile)
@@ -106,11 +106,20 @@ class DefaultStepTrackerManager(
         }
     }
 
+    override fun editSteps(newSteps: Float) {
+        _data.update { data ->
+            val totalSteps = data.steps + data.stepOffset
+            data.copy(
+                steps = newSteps,
+                stepOffset = totalSteps - newSteps
+            )
+        }
+    }
+
     override fun reset() {
-//        lastCalculatedSteps = 0
-//        lastStepCount = 0f
-//        lastCalculatedMetrics = 0f to 0f
-        _data.value = StepTrackerData()
+        _data.update {
+            StepTrackerData()
+        }
     }
 
     override fun pause() {

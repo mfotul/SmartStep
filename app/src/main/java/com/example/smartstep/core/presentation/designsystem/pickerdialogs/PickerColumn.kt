@@ -119,7 +119,7 @@ fun PickerColumn(
                     .height(50.dp)
             ) {
                 Text(
-                    text = item.toString(),
+                    text = if (item < 1) "" else item.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     color = if (selected)
                         MaterialTheme.colorScheme.onPrimary

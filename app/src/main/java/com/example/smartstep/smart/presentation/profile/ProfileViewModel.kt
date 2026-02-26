@@ -6,6 +6,7 @@ import com.example.smartstep.settings.domain.Profile
 import com.example.smartstep.settings.domain.SettingPreferences
 import com.example.smartstep.smart.presentation.profile.models.Gender
 import com.example.smartstep.smart.presentation.models.Units
+import com.example.smartstep.smart.presentation.profile.models.Dialog
 import com.example.smartstep.smart.presentation.util.convertCmToFeetInches
 import com.example.smartstep.smart.presentation.util.convertFeetInchesToCm
 import com.example.smartstep.smart.presentation.util.convertKgToLbs
@@ -50,11 +51,14 @@ class ProfileViewModel(
                 _state.update {
                     val units = Units.entries.find { units -> units.name == profileSettings.units }
                         ?: Units.CM
-                    val height = if (profileSettings.height != Int.MIN_VALUE) profileSettings.height else it.height
-                    val weight = if (profileSettings.weight != Int.MIN_VALUE) profileSettings.weight else it.weight
+                    val height =
+                        if (profileSettings.height != Int.MIN_VALUE) profileSettings.height else it.height
+                    val weight =
+                        if (profileSettings.weight != Int.MIN_VALUE) profileSettings.weight else it.weight
 
                     it.copy(
                         isInitialScreen = profileSettings.height == Int.MIN_VALUE,
+                        defaultUnits = units,
                         heightUnit = if (units == Units.CM) Units.CM else Units.FT,
                         weightUnit = if (units == Units.CM) Units.KG else Units.LB,
                         gender = Gender.entries.find { gender -> gender.name == profileSettings.gender }
@@ -69,32 +73,25 @@ class ProfileViewModel(
 
     fun onAction(action: ProfileAction) {
         when (action) {
-            is ProfileAction.OnCancel -> onCancel(action.units)
+            is ProfileAction.OnCancel -> onCancel()
             is ProfileAction.OnConfirm -> onConfirm(action.units)
             ProfileAction.OnGenderClick -> onGenderClick()
             is ProfileAction.OnGenderSelected -> onGenderSelected(action.gender)
             is ProfileAction.OnUnitSelected -> onUnitSelected(action.unit)
-            ProfileAction.OnHeightClick -> onHeightClick()
             is ProfileAction.OnHeightSelected -> onHeightSelected(action.height)
             is ProfileAction.OnHeightInchesSelected -> onHeightInchesSelected(action.height)
-            ProfileAction.OnWeightClick -> onWeightClick()
+            is ProfileAction.OnDialogOpen -> onDialogOpen(action.dialog)
             is ProfileAction.OnWeightSelected -> onWeightSelected(action.weight)
             ProfileAction.OnStarButtonClick -> onStarButtonClick()
             ProfileAction.OnSkip -> onSkip()
         }
     }
 
-    private fun onCancel(units: Units) {
+    private fun onCancel() {
         _state.update {
-            when (units) {
-                Units.CM, Units.FT -> it.copy(
-                    isHeightDialogVisible = false
-                )
-
-                Units.KG, Units.LB -> it.copy(
-                    isWeightDialogVisible = false
-                )
-            }
+            if (it.heightUnit != it.defaultUnits)
+                onUnitSelected(it.defaultUnits)
+            it.copy(dialogVisible = Dialog.NONE)
         }
     }
 
@@ -102,19 +99,19 @@ class ProfileViewModel(
         _state.update {
             when (units) {
                 Units.CM, Units.FT -> it.copy(
-                    isHeightDialogVisible = false,
                     height = if (it.heightUnit == Units.FT)
                         convertFeetInchesToCm(it.heightPicker, it.heightPickerInches)
                     else
-                        it.heightPicker
+                        it.heightPicker,
+                    dialogVisible = Dialog.NONE
                 )
 
                 Units.KG, Units.LB -> it.copy(
-                    isWeightDialogVisible = false,
                     weight = if (it.weightUnit == Units.LB)
                         convertLbsToKg(it.weightPicker)
                     else
-                        it.weightPicker
+                        it.weightPicker,
+                    dialogVisible = Dialog.NONE
                 )
             }
         }
@@ -167,20 +164,38 @@ class ProfileViewModel(
         }
     }
 
-    private fun onHeightClick() {
+    private fun onDialogOpen(dialog: Dialog) {
         _state.update {
-            if (it.heightUnit == Units.FT) {
-                val (feet, inches) = convertCmToFeetInches(it.height)
-                it.copy(
-                    isHeightDialogVisible = true,
-                    heightPicker = feet,
-                    heightPickerInches = inches
-                )
-            } else
-                it.copy(
-                    isHeightDialogVisible = true,
-                    heightPicker = it.height
-                )
+            if (dialog == Dialog.NONE) return
+            when (dialog) {
+                Dialog.HEIGHT -> {
+                    if (it.heightUnit == Units.FT) {
+                        val (feet, inches) = convertCmToFeetInches(it.height)
+                        it.copy(
+                            dialogVisible = Dialog.HEIGHT,
+                            heightPicker = feet,
+                            heightPickerInches = inches
+                        )
+                    } else
+                        it.copy(
+                            dialogVisible = Dialog.HEIGHT,
+                            heightPicker = it.height
+                        )
+                }
+
+                Dialog.WEIGHT -> {
+                    if (it.weightUnit == Units.LB)
+                        it.copy(
+                            dialogVisible = Dialog.WEIGHT,
+                            weightPicker = convertKgToLbs(it.weight)
+                        )
+                    else
+                        it.copy(
+                            dialogVisible = Dialog.WEIGHT,
+                            weightPicker = it.weight
+                        )
+                }
+            }
         }
     }
 
@@ -193,21 +208,6 @@ class ProfileViewModel(
     private fun onHeightInchesSelected(height: Int) {
         _state.update {
             it.copy(heightPickerInches = height)
-        }
-    }
-
-    private fun onWeightClick() {
-        _state.update {
-            if (it.weightUnit == Units.LB)
-                it.copy(
-                    isWeightDialogVisible = true,
-                    weightPicker = convertKgToLbs(it.weight)
-                )
-            else
-                it.copy(
-                    isWeightDialogVisible = true,
-                    weightPicker = it.weight
-                )
         }
     }
 
@@ -236,7 +236,7 @@ class ProfileViewModel(
             val initialProfile = ProfileState()
             settingsPreferences.saveProfileSettings(
                 Profile(
-                    units = state.value.heightUnit.name,
+                    units = state.value.defaultUnits.name,
                     gender = initialProfile.gender.name,
                     height = initialProfile.height,
                     weight = initialProfile.weight,

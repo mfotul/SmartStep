@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     val startRoute = if (state.height == Int.MIN_VALUE)
                         NavigationRoute.ProfileScreen
                     else
-                        NavigationRoute.HomeScreen
+                        NavigationRoute.StepScreen
 
                     NavigationRoot(
                         homeRoute = startRoute

@@ -4,13 +4,13 @@ import com.example.smartstep.R
 import com.example.smartstep.core.presentation.util.UiText
 import com.example.smartstep.smart.presentation.profile.models.Gender
 import com.example.smartstep.smart.presentation.models.Units
+import com.example.smartstep.smart.presentation.profile.models.Dialog
 import com.example.smartstep.smart.presentation.util.convertCmToFeetInches
 import com.example.smartstep.smart.presentation.util.convertKgToLbs
 
 data class ProfileState(
     val isInitialScreen: Boolean = false,
-    val isHeightDialogVisible: Boolean = false,
-    val isWeightDialogVisible: Boolean = false,
+    val dialogVisible: Dialog = Dialog.NONE,
     val isGenderDropdownExpanded: Boolean = false,
     val gender: Gender = Gender.FEMALE,
     val height: Int = 170,
@@ -20,7 +20,7 @@ data class ProfileState(
     val weight: Int = 60,
     val weightPicker: Int = 60,
     val weightUnit: Units = Units.KG,
-
+    val defaultUnits: Units = Units.CM
 ) {
     val formattedHeight: UiText
         get() {

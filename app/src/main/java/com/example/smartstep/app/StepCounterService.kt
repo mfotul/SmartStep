@@ -1,3 +1,5 @@
+@file:OptIn(FlowPreview::class)
+
 package com.example.smartstep.app
 
 import android.app.Notification
@@ -18,6 +20,7 @@ import com.example.smartstep.R
 import com.example.smartstep.smart.domain.step_counter.StepTrackerManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel

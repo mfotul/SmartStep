@@ -47,6 +47,7 @@ import com.example.smartstep.smart.presentation.profile.components.ProfileTopApp
 import com.example.smartstep.smart.presentation.profile.models.Gender
 import com.example.smartstep.smart.presentation.models.UnitType
 import com.example.smartstep.smart.presentation.models.Units
+import com.example.smartstep.smart.presentation.profile.models.Dialog
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -171,12 +172,12 @@ fun ProfileScreen(
                     SmartTextField(
                         label = stringResource(R.string.height),
                         value = state.formattedHeight.asString(),
-                        onClick = { onAction(ProfileAction.OnHeightClick) }
+                        onClick = { onAction(ProfileAction.OnDialogOpen(Dialog.HEIGHT)) }
                     )
                     SmartTextField(
                         label = stringResource(R.string.weight),
                         value = state.formattedWeight.asString(),
-                        onClick = { onAction(ProfileAction.OnWeightClick) }
+                        onClick = { onAction(ProfileAction.OnDialogOpen(Dialog.WEIGHT)) }
                     )
                 }
             }
@@ -194,42 +195,45 @@ fun ProfileScreen(
         }
     }
 
-    if (state.isHeightDialogVisible)
-        HeightWeightDialog(
-            titleResId = R.string.height,
-            descriptionResId = R.string.used_to_calculate_distance,
-            units = Units.entries.filter { it.unitType == UnitType.HEIGHT },
-            selectedUnit = state.heightUnit,
-            unitDisplayText = { it.value.asString(context) },
-            onSelectedUnits = { onAction(ProfileAction.OnUnitSelected(it)) },
-            options1 = state.heightUnit.range1,
-            selectedOption1 = state.heightPicker,
-            onSelected1 = { onAction(ProfileAction.OnHeightSelected(it)) },
-            onCanceled = { onAction(ProfileAction.OnCancel(state.heightUnit)) },
-            onConfirmed = { onAction(ProfileAction.OnConfirm(state.heightUnit)) },
-            options2 = state.heightUnit.range2,
-            selectedOption2 = state.heightPickerInches,
-            onSelected2 = {
-                if (state.heightUnit == Units.FT)
-                    onAction(ProfileAction.OnHeightInchesSelected(it))
-            },
-            unit1ResId = if (state.heightUnit == Units.FT) R.string.ft else null,
-            unit2ResId = if (state.heightUnit == Units.FT) R.string.inches else null
-        )
-    if (state.isWeightDialogVisible)
-        HeightWeightDialog(
-            titleResId = R.string.weight,
-            descriptionResId = R.string.used_to_calculate_calories,
-            units = Units.entries.filter { it.unitType == UnitType.WEIGHT },
-            selectedUnit = state.weightUnit,
-            unitDisplayText = { it.value.asString(context) },
-            onSelectedUnits = { onAction(ProfileAction.OnUnitSelected(it)) },
-            options1 = state.weightUnit.range1.toList(),
-            selectedOption1 = state.weightPicker,
-            onSelected1 = { onAction(ProfileAction.OnWeightSelected(it)) },
-            onCanceled = { onAction(ProfileAction.OnCancel(state.weightUnit)) },
-            onConfirmed = { onAction(ProfileAction.OnConfirm(state.weightUnit)) },
-        )
+    when(state.dialogVisible) {
+        Dialog.HEIGHT ->
+            HeightWeightDialog(
+                titleResId = R.string.height,
+                descriptionResId = R.string.used_to_calculate_distance,
+                units = Units.entries.filter { it.unitType == UnitType.HEIGHT },
+                selectedUnit = state.heightUnit,
+                unitDisplayText = { it.value.asString(context) },
+                onSelectedUnits = { onAction(ProfileAction.OnUnitSelected(it)) },
+                options1 = state.heightUnit.range1,
+                selectedOption1 = state.heightPicker,
+                onSelected1 = { onAction(ProfileAction.OnHeightSelected(it)) },
+                onCanceled = { onAction(ProfileAction.OnCancel) },
+                onConfirmed = { onAction(ProfileAction.OnConfirm(state.heightUnit)) },
+                options2 = state.heightUnit.range2,
+                selectedOption2 = state.heightPickerInches,
+                onSelected2 = {
+                    if (state.heightUnit == Units.FT)
+                        onAction(ProfileAction.OnHeightInchesSelected(it))
+                },
+                unit1ResId = if (state.heightUnit == Units.FT) R.string.ft else null,
+                unit2ResId = if (state.heightUnit == Units.FT) R.string.inches else null
+            )
+        Dialog.WEIGHT ->
+            HeightWeightDialog(
+                titleResId = R.string.weight,
+                descriptionResId = R.string.used_to_calculate_calories,
+                units = Units.entries.filter { it.unitType == UnitType.WEIGHT },
+                selectedUnit = state.weightUnit,
+                unitDisplayText = { it.value.asString(context) },
+                onSelectedUnits = { onAction(ProfileAction.OnUnitSelected(it)) },
+                options1 = state.weightUnit.range1.toList(),
+                selectedOption1 = state.weightPicker,
+                onSelected1 = { onAction(ProfileAction.OnWeightSelected(it)) },
+                onCanceled = { onAction(ProfileAction.OnCancel) },
+                onConfirmed = { onAction(ProfileAction.OnConfirm(state.weightUnit)) },
+            )
+        Dialog.NONE -> {}
+    }
 }
 
 @Preview(widthDp = 800)
