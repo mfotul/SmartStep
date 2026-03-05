@@ -8,4 +8,5 @@ interface StepTrackerManager {
     fun editSteps(newSteps: Float)
     fun reset()
     fun pause()
+    fun currentStep(): Int
 }

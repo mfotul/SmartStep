@@ -127,4 +127,6 @@ class DefaultStepTrackerManager(
             it.copy(isPaused = !it.isPaused)
         }
     }
+
+    override fun currentStep(): Int = data.value.steps.toInt()
 }

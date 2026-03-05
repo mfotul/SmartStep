@@ -4,14 +4,16 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartstep.settings.domain.SettingPreferences
+import com.example.smartstep.smart.domain.step.AiCoach
+import com.example.smartstep.smart.domain.step.ConnectivityObserver
 import com.example.smartstep.smart.domain.step.Step
 import com.example.smartstep.smart.domain.step.StepDatasource
 import com.example.smartstep.smart.domain.step_counter.StepTrackerManager
 import com.example.smartstep.smart.presentation.models.Units
 import com.example.smartstep.smart.presentation.step.models.DateInput
-import com.example.smartstep.smart.presentation.step.models.StepUi
 import com.example.smartstep.smart.presentation.step.models.Dialog
 import com.example.smartstep.smart.presentation.step.models.Permission
+import com.example.smartstep.smart.presentation.step.models.StepUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +38,8 @@ class StepViewModel(
     private val settingPreferences: SettingPreferences,
     private val stepTrackerManager: StepTrackerManager,
     private val stepDatasource: StepDatasource,
+    private val connectivityObserver: ConnectivityObserver,
+    private val aiCoach: AiCoach
 ) : ViewModel() {
     private var hasLoadedInitialData = false
 
@@ -60,12 +64,14 @@ class StepViewModel(
 
     private fun loadInitialData() {
         val days = getWeekEndingTodayMap()
+
         combine(
             settingPreferences.observeBackgroundAccessDisabled(),
-            settingPreferences.observeProfileSettings(),
-            stepTrackerManager.data,
-            stepDatasource.observeLast7Steps()
-        ) { backgroundAccessDisabled, profile, data, steps ->
+             settingPreferences.observeProfileSettings(),
+             stepTrackerManager.data,
+             stepDatasource.observeLast7Steps(),
+             connectivityObserver.observer(),
+        ) { backgroundAccessDisabled, profile, data, steps, connectivity ->
             val stepsMap = steps.associateBy { it.date.atZone(ZoneId.of("UTC")).toLocalDate() }
             val weeklyStats = days.entries.mapIndexed { index, day ->
                 val step = stepsMap[day.key]
@@ -96,7 +102,8 @@ class StepViewModel(
                     activeMinutes = data.activeMillis.milliseconds.inWholeMinutes.toString(),
                     units = units,
                     weeklyStats = weeklyStats,
-                    averageDailySteps = averageDailySteps
+                    averageDailySteps = averageDailySteps,
+                    connectivityStatus = connectivity,
                 )
             }
         }.flowOn(Dispatchers.Default)

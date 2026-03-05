@@ -1,5 +1,6 @@
 package com.example.smartstep.smart.presentation.step
 
+import com.example.smartstep.smart.domain.step.ConnectivityObserver
 import com.example.smartstep.smart.presentation.step.models.Dialog
 import com.example.smartstep.smart.presentation.step.models.Permission
 import com.example.smartstep.smart.presentation.models.Units
@@ -22,7 +23,9 @@ data class StepState(
     val isPaused: Boolean = false,
     val units: Units = Units.KG,
     val weeklyStats: List<StepUi> = emptyList(),
-    val averageDailySteps: Int = 0
+    val averageDailySteps: Int = 0,
+    val connectivityStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.Unavailable,
+    val aiResult: String = ""
 ) {
     val formattedDate: String
         get() {

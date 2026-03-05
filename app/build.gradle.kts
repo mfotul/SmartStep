@@ -8,9 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.smartstep"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.smartstep"
@@ -22,7 +20,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val properties = org.jetbrains.kotlin.konan.properties.Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
+
+
     buildTypes {
+        defaultConfig {
+            buildConfigField("String", "GOOGLE_API_KEY", properties.getProperty("GOOGLE_API_KEY"))
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -37,6 +43,14 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+    packaging {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/io.netty.versions.properties"
+            excludes += "META-INF/DEPENDENCIES"
+        }
     }
 }
 
@@ -75,6 +89,8 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+
+    implementation(libs.koog.agents)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
