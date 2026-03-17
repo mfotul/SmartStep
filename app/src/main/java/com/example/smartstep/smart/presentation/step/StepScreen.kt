@@ -16,9 +16,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +53,7 @@ import com.example.smartstep.smart.presentation.step.components.StepAdaptiveBack
 import com.example.smartstep.smart.presentation.step.components.StepAdaptiveFirstPermissionDialog
 import com.example.smartstep.smart.presentation.step.components.StepAdaptiveSecondPermissionDialog
 import com.example.smartstep.smart.presentation.step.components.StepAdaptiveStepGoal
+import com.example.smartstep.smart.presentation.step.components.StepAiBlock
 import com.example.smartstep.smart.presentation.step.components.StepBackgroundAccess
 import com.example.smartstep.smart.presentation.step.components.StepCounterCard
 import com.example.smartstep.smart.presentation.step.components.StepDailyAverage
@@ -72,6 +78,7 @@ private val STEP_GOAL_ITEMS = (6000 downTo 0 step 1000).toList()
 @Composable
 fun StepScreenRoot(
     onProfileScreenClick: () -> Unit,
+    onMoreClick: () -> Unit,
     viewModel: StepViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -224,7 +231,12 @@ fun StepScreenRoot(
     StepScreen(
         state = state,
         drawerState = drawerState,
-        onAction = viewModel::onAction
+        onAction = {
+            when (it) {
+                StepAction.OnMoreClick -> onMoreClick()
+                else -> viewModel.onAction(it)
+            }
+        }
     )
 
     when (state.dialogVisible) {
@@ -328,15 +340,17 @@ fun StepScreen(
             modifier = modifier
         ) { innerPadding ->
             Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
+                contentAlignment = Alignment.TopCenter,
+                modifier = Modifier.fillMaxSize()
             ) {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier
-                        .padding(16.dp)
+                        .verticalScroll(state = rememberScrollState())
+                        .fillMaxHeight()
+                        .padding(innerPadding)
+                        .padding(horizontal = 16.dp)
                         .widthIn(max = 380.dp)
                 ) {
                     StepCounterCard(
@@ -358,13 +372,19 @@ fun StepScreen(
                         weeklyStats = state.weeklyStats,
                         dailyAverage = state.averageDailySteps,
                     )
+                    StepAiBlock(
+                        isOffline = state.isOffline,
+                        aiOutput = state.aiResult,
+                        onMoreClick = { onAction(StepAction.OnMoreClick) },
+                        onTryAgainClick = { onAction(StepAction.OnTryAgainClick) }
+                    )
                 }
             }
         }
     }
 }
 
-@Preview
+@Preview()
 @Composable
 private fun StepScreenPreview() {
     SmartStepTheme {

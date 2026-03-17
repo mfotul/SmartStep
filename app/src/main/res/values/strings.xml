@@ -26,16 +26,16 @@
     <string name="steps">/%d Steps</string>
     <string name="allow_access">Allow Access</string>
     <string name="access_to_motion_sensors">To count your steps,\nSmart Step needs access to your\nmotion sensors.</string>
-    <string name="emable_access_manualy">Enable access manually</string>
+    <string name="enable_access_manually">Enable access manually</string>
     <string name="track_your_steps">To track your steps, please enable the permission in your device settings.</string>
     <string name="open_settings">Open settings</string>
     <string name="background_access_recommended">Backgroundaccess recommended</string>
-    <string name="backgroud_access_description">Background access helps Smart Step track your activity more reliably.</string>
+    <string name="background_access_description">Background access helps Smart Step track your activity more reliably.</string>
     <string name="continue_title">Continue</string>
     <string name="save">Save</string>
     <string name="step_goal">Step Goal</string>
     <string name="close">Close</string>
-    <string name="number_ft_in">%d ft %d in</string>
+    <string name="number_ft_in">%1$d ft %2$d in</string>
     <string name="number_lbs">%d lbs</string>
     <string name="the_app_will_fully_close_and_will_not_run_in_the_background">The app will fully close and will not run in the background.</string>
     <string name="fix_the_stop_counting_steps_issue">Fix the “Stop Counting Steps” issue</string>
@@ -49,4 +49,15 @@
     <string name="km">km</string>
     <string name="mi">mi</string>
     <string name="daily_average">Daily average: %s steps</string>
+    <string name="try_again">Try again</string>
+    <string name="more">More</string>
+    <string name="back">Back</string>
+    <string name="send_message">Send Message</string>
+    <string name="quick_suggestion">Quick suggestion</string>
+    <string name="ask_me_anything">Ask me anything…</string>
+    <string name="recommended_workout">Recommended workout</string>
+    <string name="explain_today_trend">Explain today\'s trend</string>
+    <string name="how_to_reach_today_s_goal">How to reach today`s goal ?</string>
+    <string name="connect_to_internet">📡 Connect to the internet to get AI insights.</string>
+    <string name="online_connection_required">Online connection required</string>"
 </resources>

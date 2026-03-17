@@ -7,10 +7,12 @@ import com.example.smartstep.smart.domain.step.ConnectivityObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class NetworkConnectivityObserver(context: Context) : ConnectivityObserver {
-    private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     override fun observer(): Flow<ConnectivityObserver.Status> {
         return callbackFlow {
@@ -36,9 +38,13 @@ class NetworkConnectivityObserver(context: Context) : ConnectivityObserver {
                 }
             }
             connectivityManager.registerDefaultNetworkCallback(callback)
+
+            if (connectivityManager.activeNetwork == null)
+                launch { send(ConnectivityObserver.Status.Lost) }
+
             awaitClose {
                 connectivityManager.unregisterNetworkCallback(callback)
             }
-        }
+        }.distinctUntilChanged()
     }
 }

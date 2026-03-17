@@ -1,7 +1,9 @@
 package com.example.smartstep.smart.domain.step
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface AiCoach {
-    fun getActivityState(): Flow<String>
+    val chats: StateFlow<List<ChatMessage>>
+    suspend fun run(question: String)
+    suspend fun question(question: String)
 }

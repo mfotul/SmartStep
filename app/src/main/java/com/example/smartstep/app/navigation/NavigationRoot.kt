@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.example.smartstep.smart.presentation.chat.ChatScreenRoot
 import com.example.smartstep.smart.presentation.step.StepScreenRoot
 import com.example.smartstep.smart.presentation.profile.ProfileScreenRoot
 
@@ -38,6 +39,17 @@ fun NavigationRoot(
                 StepScreenRoot(
                     onProfileScreenClick = {
                         backStack.add(NavigationRoute.ProfileScreen)
+                    },
+                    onMoreClick = {
+                        backStack.add(NavigationRoute.ChatScreen)
+                    }
+                )
+            }
+
+            entry<NavigationRoute.ChatScreen> {
+                ChatScreenRoot(
+                    onBackClick = {
+                        backStack.remove(NavigationRoute.ChatScreen)
                     }
                 )
             }

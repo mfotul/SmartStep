@@ -65,7 +65,7 @@ fun StepSecondPermissionDialog(
                 .fillMaxWidth()
         ) {
             Text(
-                text = stringResource(R.string.emable_access_manualy),
+                text = stringResource(R.string.enable_access_manually),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight(500)
             )

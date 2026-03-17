@@ -1,9 +1,18 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+}
+
+val localProperties = Properties()
+val localPropertiesFile: File = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
 }
 
 android {
@@ -20,13 +29,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    val properties = org.jetbrains.kotlin.konan.properties.Properties()
-    properties.load(project.rootProject.file("local.properties").inputStream())
-
-
     buildTypes {
         defaultConfig {
-            buildConfigField("String", "GOOGLE_API_KEY", properties.getProperty("GOOGLE_API_KEY"))
+            buildConfigField("String", "GOOGLE_API_KEY", localProperties.getProperty("GOOGLE_API_KEY"))
+            buildConfigField("String", "OPEN_ROUTER_API_KEY", localProperties.getProperty("OPEN_ROUTER_API_KEY"))
+            buildConfigField("String", "OLLAMA_BASEURL", localProperties.getProperty("OLLAMA_BASEURL"))
         }
 
         release {
@@ -91,6 +98,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.koog.agents)
+    implementation(libs.koog.agents.memory)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

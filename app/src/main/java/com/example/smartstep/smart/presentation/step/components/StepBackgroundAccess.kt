@@ -72,7 +72,7 @@ fun StepBackgroundAccess(
                 textAlign = TextAlign.Center
             )
             Text(
-                text = stringResource(R.string.backgroud_access_description),
+                text = stringResource(R.string.background_access_description),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondary,
                 textAlign = TextAlign.Center

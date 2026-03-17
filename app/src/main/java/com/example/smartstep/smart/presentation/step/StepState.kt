@@ -1,9 +1,9 @@
 package com.example.smartstep.smart.presentation.step
 
-import com.example.smartstep.smart.domain.step.ConnectivityObserver
+import com.example.smartstep.smart.presentation.models.Units
+import com.example.smartstep.smart.presentation.step.models.AiResult
 import com.example.smartstep.smart.presentation.step.models.Dialog
 import com.example.smartstep.smart.presentation.step.models.Permission
-import com.example.smartstep.smart.presentation.models.Units
 import com.example.smartstep.smart.presentation.step.models.StepUi
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -24,8 +24,8 @@ data class StepState(
     val units: Units = Units.KG,
     val weeklyStats: List<StepUi> = emptyList(),
     val averageDailySteps: Int = 0,
-    val connectivityStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.Unavailable,
-    val aiResult: String = ""
+    val isOffline: Boolean = false,
+    val aiResult: AiResult = AiResult.Loading,
 ) {
     val formattedDate: String
         get() {

@@ -10,6 +10,7 @@ import com.example.smartstep.smart.domain.step.Step
 import com.example.smartstep.smart.domain.step.StepDatasource
 import com.example.smartstep.smart.domain.step_counter.StepTrackerManager
 import com.example.smartstep.smart.presentation.models.Units
+import com.example.smartstep.smart.presentation.step.models.AiResult
 import com.example.smartstep.smart.presentation.step.models.DateInput
 import com.example.smartstep.smart.presentation.step.models.Dialog
 import com.example.smartstep.smart.presentation.step.models.Permission
@@ -19,8 +20,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -64,14 +67,13 @@ class StepViewModel(
 
     private fun loadInitialData() {
         val days = getWeekEndingTodayMap()
-
         combine(
             settingPreferences.observeBackgroundAccessDisabled(),
-             settingPreferences.observeProfileSettings(),
-             stepTrackerManager.data,
-             stepDatasource.observeLast7Steps(),
-             connectivityObserver.observer(),
-        ) { backgroundAccessDisabled, profile, data, steps, connectivity ->
+            settingPreferences.observeProfileSettings(),
+            stepTrackerManager.data,
+            stepDatasource.observeLast7Steps(),
+            aiCoach.chats
+        ) { backgroundAccessDisabled, profile, data, steps, chats ->
             val stepsMap = steps.associateBy { it.date.atZone(ZoneId.of("UTC")).toLocalDate() }
             val weeklyStats = days.entries.mapIndexed { index, day ->
                 val step = stepsMap[day.key]
@@ -90,9 +92,10 @@ class StepViewModel(
             }
             val units = Units.valueOf(profile.units)
             val averageDailySteps = (steps.sumOf { it.steps.toDouble() } / 7).toInt()
+            val chat = chats.firstOrNull()
+            val distance =
+                if (units == Units.CM) data.distance / 1000f else data.distance / 1609.34f
             _state.update {
-                val distance =
-                    if (units == Units.CM) data.distance / 1000f else data.distance / 1609.34f
                 it.copy(
                     isBackgroundAccessEnabled = backgroundAccessDisabled,
                     goal = data.goal,
@@ -103,10 +106,24 @@ class StepViewModel(
                     units = units,
                     weeklyStats = weeklyStats,
                     averageDailySteps = averageDailySteps,
-                    connectivityStatus = connectivity,
+                    aiResult = if (chat != null)
+                        AiResult.Success(chat.message)
+                    else
+                        AiResult.Loading
                 )
             }
         }.flowOn(Dispatchers.Default)
+            .launchIn(viewModelScope)
+
+        connectivityObserver
+            .observer()
+            .onEach { connectivityObserverStatus ->
+                println("TEST: $connectivityObserverStatus")
+                if (connectivityObserverStatus == ConnectivityObserver.Status.Lost)
+                    _state.update { state -> state.copy(isOffline = true) }
+                else
+                    aiCoachMessage()
+            }
             .launchIn(viewModelScope)
     }
 
@@ -124,6 +141,8 @@ class StepViewModel(
             StepAction.OnEditStepsSave -> onEditStepsSave()
             StepAction.OnResetStepsConfirmClick -> onResetStepsConfirmClick()
             StepAction.OnPauseClick -> onPauseClick()
+            StepAction.OnTryAgainClick -> onTryAgainClick()
+            StepAction.OnMoreClick -> {}
         }
     }
 
@@ -196,9 +215,7 @@ class StepViewModel(
         viewModelScope.launch {
             _state.update {
                 settingPreferences.saveGoal(it.goalSelected)
-                it.copy(
-                    dialogVisible = Dialog.NONE,
-                )
+                it.copy(dialogVisible = Dialog.NONE)
             }
         }
     }
@@ -218,10 +235,9 @@ class StepViewModel(
                         dailyGoal = it.goal
                     )
                 )
-                it.copy(
-                    dialogVisible = Dialog.NONE
-                )
+                it.copy(dialogVisible = Dialog.NONE)
             }
+            aiCoachMessage()
         }
     }
 
@@ -230,12 +246,7 @@ class StepViewModel(
             LocalDate.of(dateInput.year, dateInput.month, dateInput.day)
                 .atStartOfDay(ZoneId.of("UTC"))
         }.getOrNull()?.let { date ->
-            _state.update {
-                it.copy(
-                    date = date,
-                    dialogVisible = Dialog.EDIT_STEPS
-                )
-            }
+            _state.update { it.copy(date = date, dialogVisible = Dialog.EDIT_STEPS) }
         }
     }
 
@@ -264,5 +275,20 @@ class StepViewModel(
         }.associateWith { date ->
             date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US)
         }
+    }
+
+    private fun onTryAgainClick() {
+        viewModelScope.launch {
+            val status = connectivityObserver.observer().first()
+            if (status != ConnectivityObserver.Status.Lost) {
+                _state.update { it.copy(isOffline = false) }
+                aiCoachMessage()
+            }
+        }
+    }
+
+    private suspend fun aiCoachMessage() {
+        _state.update { it.copy(aiResult = AiResult.Loading) }
+        aiCoach.run("Check my stats and tell me short how I'm doing")
     }
 }

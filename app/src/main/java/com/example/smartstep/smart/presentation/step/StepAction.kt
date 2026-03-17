@@ -17,5 +17,7 @@ sealed interface StepAction {
     data class OnStepGoalSelected(val goal: Int) : StepAction
     data object OnStepGoalSave : StepAction
     data object OnPauseClick : StepAction
+    data object OnTryAgainClick : StepAction
+    data object OnMoreClick : StepAction
 }
 
