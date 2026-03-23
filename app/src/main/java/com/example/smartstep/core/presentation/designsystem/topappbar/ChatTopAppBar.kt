@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartstep.R
-import com.example.smartstep.app.SmartStepApplication
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 
 @Composable

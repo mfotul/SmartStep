@@ -3,7 +3,6 @@ package com.example.smartstep.smart.presentation.report
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartstep.smart.domain.step.StepDatasource
-import com.example.smartstep.smart.presentation.preview.PreviewModels
 import com.example.smartstep.smart.presentation.report.model.DailyData
 import com.example.smartstep.smart.presentation.report.model.DataSource
 import com.example.smartstep.smart.presentation.report.model.DataType
