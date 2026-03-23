@@ -56,7 +56,7 @@ fun StepDateDialog(
         Text(
             text = "Date",
             fontFamily = Inter,
-            fontWeight = FontWeight(500),
+            fontWeight = FontWeight.Medium,
             fontSize = 20.sp,
             lineHeight = 28.sp,
             color = MaterialTheme.colorScheme.onPrimary
@@ -105,7 +105,7 @@ fun StepDateDialog(
                 Text(
                     text = stringResource(R.string.cancel),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
             }
             TextButton(
@@ -114,7 +114,7 @@ fun StepDateDialog(
                 Text(
                     text = stringResource(R.string.save),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
             }
         }

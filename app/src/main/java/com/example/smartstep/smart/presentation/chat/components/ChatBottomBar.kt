@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -78,6 +81,7 @@ fun ChatBottomBar(
                     strokeWidth = 4f
                 )
             }
+            .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
         Column(
             modifier = modifier
@@ -94,7 +98,7 @@ fun ChatBottomBar(
                 Text(
                     text = stringResource(R.string.quick_suggestion),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
                 IconButton(
                     onClick = onSuggestionsSwitchClick

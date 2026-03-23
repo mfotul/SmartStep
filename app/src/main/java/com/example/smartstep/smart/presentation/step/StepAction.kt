@@ -19,5 +19,6 @@ sealed interface StepAction {
     data object OnPauseClick : StepAction
     data object OnTryAgainClick : StepAction
     data object OnMoreClick : StepAction
+    data object OnReportClick: StepAction
 }
 

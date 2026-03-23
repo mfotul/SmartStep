@@ -10,6 +10,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.smartstep.smart.presentation.chat.ChatScreenRoot
 import com.example.smartstep.smart.presentation.step.StepScreenRoot
 import com.example.smartstep.smart.presentation.profile.ProfileScreenRoot
+import com.example.smartstep.smart.presentation.report.ReportScreenRoot
 
 @Composable
 fun NavigationRoot(
@@ -42,6 +43,9 @@ fun NavigationRoot(
                     },
                     onMoreClick = {
                         backStack.add(NavigationRoute.ChatScreen)
+                    },
+                    onReportClick = {
+                        backStack.add(NavigationRoute.ReportScreen)
                     }
                 )
             }
@@ -50,6 +54,14 @@ fun NavigationRoot(
                 ChatScreenRoot(
                     onBackClick = {
                         backStack.remove(NavigationRoute.ChatScreen)
+                    }
+                )
+            }
+
+            entry <NavigationRoute.ReportScreen> {
+                ReportScreenRoot(
+                    onBackClick = {
+                        backStack.remove(NavigationRoute.ReportScreen)
                     }
                 )
             }

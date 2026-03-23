@@ -40,7 +40,7 @@ fun StepTextWithIcon(
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.surfaceContainerHighest
             )
             Text(

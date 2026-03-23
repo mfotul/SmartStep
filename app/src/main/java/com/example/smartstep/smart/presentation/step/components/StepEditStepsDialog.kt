@@ -41,13 +41,13 @@ fun StepEditStepsDialog(
                 text = stringResource(R.string.edit_steps),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight(500)
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = stringResource(R.string.calories_distance_duration),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSecondary,
-                fontWeight = FontWeight(500)
+                fontWeight = FontWeight.Medium
             )
         }
         Column (
@@ -74,7 +74,7 @@ fun StepEditStepsDialog(
                 Text(
                     text = stringResource(R.string.cancel),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
             }
             TextButton(
@@ -83,7 +83,7 @@ fun StepEditStepsDialog(
                 Text(
                     text = stringResource(R.string.save),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
             }
         }

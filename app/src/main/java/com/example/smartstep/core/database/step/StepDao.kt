@@ -10,6 +10,9 @@ interface StepDao {
     @Query("SELECT * FROM stepentity ORDER BY date")
     fun observeSteps(): Flow<List<StepEntity>>
 
+    @Query("SELECT * FROM stepentity WHERE date BETWEEN :from AND :to")
+    fun observeSteps(from: Long, to: Long): Flow<List<StepEntity>>
+
     @Query("SELECT * FROM stepentity WHERE date = :date")
     fun getStepsByDate(date: Long): Flow<List<StepEntity>>
 

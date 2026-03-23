@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.GlobalContext.startKoin
 
 const val CHANNEL_ID = "step_counter"
@@ -30,6 +31,7 @@ class SmartStepApplication : Application() {
 
         startKoin {
             androidContext(this@SmartStepApplication)
+            workManagerFactory()
             modules(
                 appModule,
                 smartModule,

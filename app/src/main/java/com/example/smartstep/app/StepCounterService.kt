@@ -16,7 +16,12 @@ import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.smartstep.R
+import com.example.smartstep.core.presentation.util.calculateInitialTimeDelay
+import com.example.smartstep.smart.data.step.StepWorker
 import com.example.smartstep.smart.domain.step_counter.StepTrackerManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +35,7 @@ import kotlinx.coroutines.flow.sample
 import org.koin.android.ext.android.inject
 import java.text.NumberFormat
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 class StepCounterService : Service(), SensorEventListener {
@@ -54,6 +60,7 @@ class StepCounterService : Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
+        println("TEST onCreate")
         stepSensor?.let {
             sensorManager.registerListener(
                 this,
@@ -70,6 +77,18 @@ class StepCounterService : Service(), SensorEventListener {
 
         pendingIntent =
             PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val initialDelay = calculateInitialTimeDelay()
+
+        val dailyWorkRequest = OneTimeWorkRequestBuilder<StepWorker>()
+            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(applicationContext).enqueueUniqueWork(
+            DAILY_DATABASE_INSERT_TASK,
+            ExistingWorkPolicy.REPLACE,
+            dailyWorkRequest
+        )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -137,9 +156,11 @@ class StepCounterService : Service(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        println("TEST onDestroy")
         sensorManager.unregisterListener(this)
         serviceScope.cancel()
         stepTrackerManager.reset()
+        WorkManager.getInstance(applicationContext).cancelUniqueWork(DAILY_DATABASE_INSERT_TASK)
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {}
@@ -155,5 +176,6 @@ class StepCounterService : Service(), SensorEventListener {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
+        const val DAILY_DATABASE_INSERT_TASK = "DailyDatabaseInsertTask"
     }
 }

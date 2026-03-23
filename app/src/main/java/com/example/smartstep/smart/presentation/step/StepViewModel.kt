@@ -66,7 +66,7 @@ class StepViewModel(
     val goalTextFieldState = TextFieldState()
 
     private fun loadInitialData() {
-        val days = getWeekEndingTodayMap()
+        val weekEndingToday = getWeekEndingTodayMap()
         combine(
             settingPreferences.observeBackgroundAccessDisabled(),
             settingPreferences.observeProfileSettings(),
@@ -75,7 +75,7 @@ class StepViewModel(
             aiCoach.chats
         ) { backgroundAccessDisabled, profile, data, steps, chats ->
             val stepsMap = steps.associateBy { it.date.atZone(ZoneId.of("UTC")).toLocalDate() }
-            val weeklyStats = days.entries.mapIndexed { index, day ->
+            val weeklyStats = weekEndingToday.entries.mapIndexed { index, day ->
                 val step = stepsMap[day.key]
                 if (index == 6)
                     StepUi(
@@ -118,7 +118,6 @@ class StepViewModel(
         connectivityObserver
             .observer()
             .onEach { connectivityObserverStatus ->
-                println("TEST: $connectivityObserverStatus")
                 if (connectivityObserverStatus == ConnectivityObserver.Status.Lost)
                     _state.update { state -> state.copy(isOffline = true) }
                 else
@@ -142,7 +141,7 @@ class StepViewModel(
             StepAction.OnResetStepsConfirmClick -> onResetStepsConfirmClick()
             StepAction.OnPauseClick -> onPauseClick()
             StepAction.OnTryAgainClick -> onTryAgainClick()
-            StepAction.OnMoreClick -> {}
+            StepAction.OnMoreClick, StepAction.OnReportClick -> {}
         }
     }
 

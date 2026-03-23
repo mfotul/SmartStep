@@ -47,7 +47,7 @@ fun StepResetSteps(
                 Text(
                     text = stringResource(com.example.smartstep.R.string.cancel),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
             }
             TextButton(
@@ -56,7 +56,7 @@ fun StepResetSteps(
                 Text(
                     text = stringResource(com.example.smartstep.R.string.save),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500)
+                    fontWeight = FontWeight.Medium
                 )
             }
         }

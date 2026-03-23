@@ -67,7 +67,7 @@ fun StepSecondPermissionDialog(
             Text(
                 text = stringResource(R.string.enable_access_manually),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight(500)
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = stringResource(R.string.track_your_steps),
@@ -84,17 +84,17 @@ fun StepSecondPermissionDialog(
             Text(
                 text = "1. Open Permissions",
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
             )
             Text(
                 text = "2. Tap Physical activity",
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
             )
             Text(
                 text = "3. Select Allow",
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
             )
         }
         PrimaryButton(

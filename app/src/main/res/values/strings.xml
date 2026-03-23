@@ -24,6 +24,7 @@
     <string name="used_to_calculate_calories">Used to calculate calories</string>
     <string name="menu">Menu</string>
     <string name="steps">/%d Steps</string>
+    <string name="steps_lowercase">steps</string>
     <string name="allow_access">Allow Access</string>
     <string name="access_to_motion_sensors">To count your steps,\nSmart Step needs access to your\nmotion sensors.</string>
     <string name="enable_access_manually">Enable access manually</string>
@@ -59,5 +60,21 @@
     <string name="explain_today_trend">Explain today\'s trend</string>
     <string name="how_to_reach_today_s_goal">How to reach today`s goal ?</string>
     <string name="connect_to_internet">📡 Connect to the internet to get AI insights.</string>
-    <string name="online_connection_required">Online connection required</string>"
+    <string name="online_connection_required">Online connection required</string>
+    <string name="ai_coach">AI Coach</string>
+    <string name="report">Report</string>
+    <string name="this_week">This Week</string>
+    <string name="average_value">Daily average: %1$d %2$s</string>
+    <string name="calories">calories</string>
+    <string name="minutes">minutes</string>
+    <string name="kilometers">kilometers</string>
+    <string name="goal_steps">Goal: %s steps</string>
+    <string name="no_data">No data</string>
+    <string name="calories_label">Calories</string>
+    <string name="time_label">Time</string>
+    <string name="distance_label">Distance</string>
+    <string name="minutes_label">Minutes</string>
+    <string name="kilometers_label">Kilometers</string>
+    <string name="kcal">kcal</string>
+    <string name="min">min</string>
 </resources>

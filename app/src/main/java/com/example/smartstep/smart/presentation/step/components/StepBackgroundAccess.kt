@@ -68,7 +68,7 @@ fun StepBackgroundAccess(
             Text(
                 text = stringResource(R.string.background_access_recommended),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
             Text(

@@ -66,7 +66,7 @@ fun StepGoal(
         Text(
             text = stringResource(R.string.step_goal),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight(500),
+            fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onPrimary,
         )
         PickerColumn(
@@ -86,7 +86,7 @@ fun StepGoal(
             Text(
                 text = stringResource(R.string.cancel),
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
             )
         }
     }

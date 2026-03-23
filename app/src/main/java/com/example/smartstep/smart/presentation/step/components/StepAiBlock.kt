@@ -82,7 +82,7 @@ fun StepAiBlock(
                     else
                         stringResource(R.string.more),
                     style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight(500),
+                    fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 IconButton(

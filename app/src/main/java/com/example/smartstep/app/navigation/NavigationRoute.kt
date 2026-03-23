@@ -4,13 +4,16 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface NavigationRoute: NavKey {
+sealed interface NavigationRoute : NavKey {
     @Serializable
-    data object ChatScreen: NavigationRoute, NavKey
+    data object ChatScreen : NavigationRoute, NavKey
 
     @Serializable
-    data object ProfileScreen: NavigationRoute, NavKey
+    data object ProfileScreen : NavigationRoute, NavKey
 
     @Serializable
-    data object StepScreen: NavigationRoute, NavKey
+    data object StepScreen : NavigationRoute, NavKey
+    @Serializable
+
+    data object ReportScreen : NavigationRoute, NavKey
 }

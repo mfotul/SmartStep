@@ -83,8 +83,11 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.androidx.workmanager)
 
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.androidx.workmanager)
 
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)

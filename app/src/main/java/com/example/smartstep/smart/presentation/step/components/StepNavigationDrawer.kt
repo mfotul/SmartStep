@@ -58,7 +58,7 @@ fun StepNavigationDrawer(
                                 Text(
                                     text = stringResource(R.string.fix_the_stop_counting_steps_issue),
                                     style = MaterialTheme.typography.headlineLarge,
-                                    fontWeight = FontWeight(500),
+                                    fontWeight = FontWeight.Medium,
                                 )
                             },
                             selected = false,
@@ -71,7 +71,7 @@ fun StepNavigationDrawer(
                             Text(
                                 text = stringResource(R.string.step_goal),
                                 style = MaterialTheme.typography.headlineLarge,
-                                fontWeight = FontWeight(500),
+                                fontWeight = FontWeight.Medium,
                             )
                         },
                         selected = false,
@@ -83,7 +83,7 @@ fun StepNavigationDrawer(
                             Text(
                                 text = stringResource(R.string.personal_settings),
                                 style = MaterialTheme.typography.headlineLarge,
-                                fontWeight = FontWeight(500),
+                                fontWeight = FontWeight.Medium,
                             )
                         },
                         selected = false,
@@ -95,7 +95,7 @@ fun StepNavigationDrawer(
                             Text(
                                 text = stringResource(R.string.edit_steps),
                                 style = MaterialTheme.typography.headlineLarge,
-                                fontWeight = FontWeight(500),
+                                fontWeight = FontWeight.Medium,
                             )
                         },
                         selected = false,
@@ -107,7 +107,7 @@ fun StepNavigationDrawer(
                             Text(
                                 text = stringResource(R.string.reset_today_s_steps),
                                 style = MaterialTheme.typography.headlineLarge,
-                                fontWeight = FontWeight(500),
+                                fontWeight = FontWeight.Medium,
                             )
                         },
                         selected = false,
@@ -119,7 +119,7 @@ fun StepNavigationDrawer(
                             Text(
                                 text = "Exit",
                                 style = MaterialTheme.typography.headlineLarge,
-                                fontWeight = FontWeight(500),
+                                fontWeight = FontWeight.Medium,
                             )
                         },
                         colors = NavigationDrawerItemDefaults.colors(

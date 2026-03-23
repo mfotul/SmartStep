@@ -69,7 +69,7 @@ fun StepDayItem(
             Text(
                 text = stepUi.day,
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight(500),
+                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.surfaceContainerHighest
             )
             Text(

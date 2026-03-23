@@ -24,6 +24,19 @@ class RoomStepDataSource(
             }
     }
 
+    override fun observeFromToSteps(
+        from: Instant,
+        to: Instant
+    ): Flow<List<Step>> {
+        return stepDao
+            .observeSteps(from.toEpochMilli(), to.toEpochMilli())
+            .map { steps ->
+                steps.map {
+                    it.toStep()
+                }
+            }
+    }
+
     override fun getStepsByDate(date: Instant): Flow<List<Step>> {
         return stepDao
             .getStepsByDate(date.toEpochMilli())

@@ -69,7 +69,7 @@ fun StepFirstPermissionDialog(
         Text(
             text = stringResource(R.string.access_to_motion_sensors),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight(500),
+            fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center
         )
         PrimaryButton(

@@ -77,6 +77,7 @@ private val STEP_GOAL_ITEMS = (6000 downTo 0 step 1000).toList()
 fun StepScreenRoot(
     onProfileScreenClick: () -> Unit,
     onMoreClick: () -> Unit,
+    onReportClick: () -> Unit,
     viewModel: StepViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -232,6 +233,7 @@ fun StepScreenRoot(
         onAction = {
             when (it) {
                 StepAction.OnMoreClick -> onMoreClick()
+                StepAction.OnReportClick -> onReportClick()
                 else -> viewModel.onAction(it)
             }
         }
@@ -365,6 +367,9 @@ fun StepScreen(
                         onPauseClick = {
                             onAction(StepAction.OnPauseClick)
                         },
+                        onReportClick = {
+                            onAction(StepAction.OnReportClick)
+                        }
                     )
                     StepDailyAverage(
                         weeklyStats = state.weeklyStats,

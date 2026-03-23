@@ -18,14 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.smartstep.R
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 import com.example.smartstep.core.presentation.designsystem.theme.borderColor
 import com.example.smartstep.smart.presentation.chat.components.ChatAiMessage
 import com.example.smartstep.smart.presentation.chat.components.ChatBottomBar
-import com.example.smartstep.smart.presentation.chat.components.ChatTopAppBar
+import com.example.smartstep.core.presentation.designsystem.topappbar.SmartStepTopAppBar
 import com.example.smartstep.smart.presentation.chat.components.ChatUserMessage
 import com.example.smartstep.smart.presentation.preview.PreviewModels
 import org.koin.compose.viewmodel.koinViewModel
@@ -60,7 +62,8 @@ fun ChatScreen(
 
     Scaffold(
         topBar = {
-            ChatTopAppBar(
+            SmartStepTopAppBar(
+                text = stringResource(R.string.ai_coach),
                 onBackClick = { onAction(ChatAction.OnBackClick) }
             )
         },
