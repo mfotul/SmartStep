@@ -6,4 +6,5 @@ data class Step(
     val date: Instant,
     val steps: Float,
     val dailyGoal: Int,
+    val activeMillis: Long
 )

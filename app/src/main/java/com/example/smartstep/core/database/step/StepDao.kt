@@ -14,7 +14,7 @@ interface StepDao {
     fun observeSteps(from: Long, to: Long): Flow<List<StepEntity>>
 
     @Query("SELECT * FROM stepentity WHERE date = :date")
-    fun getStepsByDate(date: Long): Flow<List<StepEntity>>
+    fun getStepsByDate(date: Long): Flow<StepEntity?>
 
     @Upsert
     suspend fun upsertStep(step: StepEntity)

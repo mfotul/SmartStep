@@ -36,8 +36,8 @@ import java.util.Locale
 fun StepCounterCard(
     steps: Float,
     goal: Int,
-    distance: String,
-    calories: String,
+    distance: Float,
+    calories: Float,
     activeMinutes: String,
     isPaused: Boolean,
     units: Units,
@@ -152,7 +152,7 @@ fun StepCounterCard(
             ) {
                 StepTextWithIcon(
                     id = R.drawable.pin__location__direction,
-                    text = distance,
+                    text = "%.1f".format(distance),
                     unit = if (units == Units.CM)
                         stringResource(R.string.km)
                     else
@@ -160,7 +160,7 @@ fun StepCounterCard(
                 )
                 StepTextWithIcon(
                     id = R.drawable.weight_diet,
-                    text = calories,
+                    text = "%.0f".format(calories),
                     unit = "kcal"
                 )
                 StepTextWithIcon(
@@ -180,8 +180,8 @@ private fun StepCounterCardPreview() {
         StepCounterCard(
             steps = 1000f,
             goal = 2000,
-            distance = "1000.0",
-            calories = "1000",
+            distance = 1000f,
+            calories = 1000f,
             activeMinutes = "1000",
             isPaused = false,
             units = Units.KG,

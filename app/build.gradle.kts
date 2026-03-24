@@ -101,7 +101,6 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.koog.agents)
-    implementation(libs.koog.agents.memory)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

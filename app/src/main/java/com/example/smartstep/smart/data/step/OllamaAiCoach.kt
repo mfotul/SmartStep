@@ -3,12 +3,6 @@ package com.example.smartstep.smart.data.step
 import ai.koog.agents.core.agent.AIAgentService
 import ai.koog.agents.core.agent.config.AIAgentConfig
 import ai.koog.agents.core.agent.functionalStrategy
-import ai.koog.agents.core.dsl.extension.asAssistantMessage
-import ai.koog.agents.core.dsl.extension.containsToolCalls
-import ai.koog.agents.core.dsl.extension.executeMultipleTools
-import ai.koog.agents.core.dsl.extension.extractToolCalls
-import ai.koog.agents.core.dsl.extension.requestLLMMultiple
-import ai.koog.agents.core.dsl.extension.sendMultipleToolResults
 import ai.koog.agents.core.tools.ToolRegistry
 import ai.koog.agents.core.tools.annotations.LLMDescription
 import ai.koog.agents.core.tools.annotations.Tool
@@ -119,7 +113,7 @@ class OllamaAiCoach(
         Current activity state:
                 Steps: $currentSteps
                 Goal: $goal
-                Percent: $percent
+                Percent: $percent%
                 Time of day: $timeOfDay
     """.trimIndent()
     }

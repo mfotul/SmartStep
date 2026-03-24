@@ -30,7 +30,8 @@ class StepWorker(
             Step(
                 steps = stepTrackerManager.data.value.steps,
                 date = yesterday,
-                dailyGoal = stepTrackerManager.data.value.goal
+                dailyGoal = stepTrackerManager.data.value.goal,
+                activeMillis = stepTrackerManager.data.value.activeMillis
             )
         )
         stepTrackerManager.reset()

@@ -64,7 +64,7 @@
     <string name="ai_coach">AI Coach</string>
     <string name="report">Report</string>
     <string name="this_week">This Week</string>
-    <string name="average_value">Daily average: %1$d %2$s</string>
+    <string name="average_value">Daily average: %1$s %2$s</string>
     <string name="calories">calories</string>
     <string name="minutes">minutes</string>
     <string name="kilometers">kilometers</string>

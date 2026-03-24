@@ -8,7 +8,8 @@ fun StepEntity.toStep(): Step {
     return Step(
         date = Instant.ofEpochMilli(date),
         steps = steps,
-        dailyGoal = dailyGoal
+        dailyGoal = dailyGoal,
+        activeMillis = activeMillis
     )
 }
 
@@ -16,6 +17,7 @@ fun Step.toStepEntity(): StepEntity {
     return StepEntity(
         date = date.toEpochMilli(),
         steps = steps,
-        dailyGoal = dailyGoal
+        dailyGoal = dailyGoal,
+        activeMillis = activeMillis
     )
 }

@@ -20,12 +20,13 @@ import androidx.compose.ui.unit.dp
 import com.example.smartstep.R
 import com.example.smartstep.core.presentation.designsystem.theme.SmartStepTheme
 import com.example.smartstep.smart.presentation.report.model.DataType
+import java.util.Locale
 
 @Composable
 fun ReportCounterCard(
     isTablet: Boolean,
-    value: Int,
-    dailyAverageValue: Int,
+    value: Float,
+    dailyAverageValue: Float,
     dataType: DataType,
     modifier: Modifier = Modifier
 ) {
@@ -67,14 +68,21 @@ fun ReportCounterCard(
                 )
             }
             Text(
-                text = value.toString(),
+                text = if (dataType == DataType.DISTANCE)
+                    "%.1f".format(Locale.US,value)
+                else
+                    "%.0f".format(value),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerHighest
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(R.string.average_value,
-                    dailyAverageValue,
+                text = stringResource(
+                    R.string.average_value,
+                    if (dataType == DataType.DISTANCE)
+                        "%.1f".format(Locale.US, dailyAverageValue)
+                    else
+                        "%.0f".format(dailyAverageValue),
                     stringResource(getValueSuffix(dataType))
                 ),
                 style = MaterialTheme.typography.bodyMedium,
@@ -85,7 +93,7 @@ fun ReportCounterCard(
 }
 
 private fun getDescription(dataType: DataType): Int {
-    return when(dataType) {
+    return when (dataType) {
         DataType.STEPS -> R.string.steps_label
         DataType.CALORIES -> R.string.calories_label
         DataType.TIME -> R.string.minutes_label
@@ -94,7 +102,7 @@ private fun getDescription(dataType: DataType): Int {
 }
 
 private fun getValueSuffix(dataType: DataType): Int {
-    return when(dataType) {
+    return when (dataType) {
         DataType.STEPS -> R.string.steps_lowercase
         DataType.CALORIES -> R.string.kcal
         DataType.TIME -> R.string.min
@@ -108,8 +116,8 @@ private fun ReportCounterCardPreview() {
     SmartStepTheme {
         ReportCounterCard(
             isTablet = false,
-            value = 1000,
-            dailyAverageValue = 1000,
+            value = 1000f,
+            dailyAverageValue = 1000f,
             dataType = DataType.DISTANCE
         )
     }

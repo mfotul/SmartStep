@@ -2,10 +2,12 @@ package com.example.smartstep.smart.presentation.report
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -24,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices.PHONE
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -127,7 +128,7 @@ fun ReportScreen(
                     dailyAverageValue = state.cardDailyAverageValue
                 )
                 ReportWeekSelector(
-                    week = state.week,
+                    week = state.weekTitle,
                     isLeftArrowEnabled = state.isLeftArrowEnabled,
                     isRightArrowEnabled = state.isRightArrowEnabled,
                     onLeftArrowClick = {
@@ -148,13 +149,18 @@ fun ReportScreen(
                             dailyData = dailyData
                         )
                     }
+                    item {
+                        Spacer(
+                            Modifier.height(80.dp)
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(widthDp = 500, device = PHONE)
+@Preview
 @Composable
 private fun ReportScreenPreview() {
     SmartStepTheme {

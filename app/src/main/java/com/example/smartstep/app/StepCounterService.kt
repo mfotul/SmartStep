@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 class StepCounterService : Service(), SensorEventListener {
-    private val serviceScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val sensorManager by lazy {
         getSystemService(SENSOR_SERVICE) as SensorManager
@@ -60,7 +60,6 @@ class StepCounterService : Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
-        println("TEST onCreate")
         stepSensor?.let {
             sensorManager.registerListener(
                 this,

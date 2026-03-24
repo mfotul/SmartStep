@@ -31,6 +31,7 @@ import com.example.smartstep.smart.presentation.preview.PreviewModels
 import com.example.smartstep.smart.presentation.report.model.DailyData
 import com.example.smartstep.smart.presentation.report.model.DataSource
 import com.example.smartstep.smart.presentation.report.model.DataType
+import kotlin.math.roundToInt
 
 @Composable
 fun ReportDayItem(
@@ -125,7 +126,7 @@ fun ReportDayItem(
                         MaterialTheme.typography.headlineLarge.toSpanStyle()
                             .copy(color = contentColor, fontWeight = FontWeight.Medium)
                     ) {
-                        append(dailyData.value)
+                        append(dailyData.value.roundToInt().toString())
                     }
                     withStyle(
                         MaterialTheme.typography.bodySmall.toSpanStyle()
@@ -136,16 +137,20 @@ fun ReportDayItem(
                 },
                 style = MaterialTheme.typography.titleMedium
             )
-            if (dailyData.dataType == DataType.STEPS) {
-                Text(
-                    text = if (dailyData.dataSource == DataSource.NONE)
+
+            Text(
+                text = when {
+                    dailyData.dataSource == DataSource.NONE ->
                         stringResource(R.string.no_data)
-                    else
-                        stringResource(R.string.goal_steps, dailyData.goal),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
-            }
+
+                    dailyData.dataType == DataType.STEPS ->
+                        stringResource(R.string.goal_steps, dailyData.goal)
+
+                    else -> ""
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSecondary
+            )
         }
     }
 }
@@ -155,7 +160,7 @@ fun ReportDayItem(
 private fun ReportDayItemPreview() {
     SmartStepTheme {
         ReportDayItem(
-            dailyData = PreviewModels.reportState.weekData[3]
+            dailyData = PreviewModels.reportState.weekData[2]
         )
     }
 }

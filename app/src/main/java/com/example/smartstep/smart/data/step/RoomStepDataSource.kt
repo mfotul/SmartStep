@@ -11,19 +11,6 @@ import java.time.temporal.ChronoUnit
 class RoomStepDataSource(
     private val stepDao: StepDao
 ) : StepDatasource {
-    override fun observeLast7Steps(): Flow<List<Step>> {
-        return stepDao
-            .observeSteps()
-            .map { steps ->
-                steps
-                    .map { it.toStep() }
-                    .filter {
-                        it.date
-                            .isAfter(Instant.now().minus(7, ChronoUnit.DAYS))
-                    }
-            }
-    }
-
     override fun observeFromToSteps(
         from: Instant,
         to: Instant
@@ -37,11 +24,11 @@ class RoomStepDataSource(
             }
     }
 
-    override fun getStepsByDate(date: Instant): Flow<List<Step>> {
+    override fun getStepsByDate(date: Instant): Flow<Step?> {
         return stepDao
             .getStepsByDate(date.toEpochMilli())
             .map { steps ->
-                steps.map { it.toStep() }
+                steps?.toStep()
             }
     }
 

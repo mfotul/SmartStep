@@ -15,6 +15,8 @@ import com.example.smartstep.smart.presentation.step.models.DateInput
 import com.example.smartstep.smart.presentation.step.models.Dialog
 import com.example.smartstep.smart.presentation.step.models.Permission
 import com.example.smartstep.smart.presentation.step.models.StepUi
+import com.example.smartstep.smart.presentation.util.calculateCaloriesFromSteps
+import com.example.smartstep.smart.presentation.util.calculateDistanceFromSteps
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,13 +67,17 @@ class StepViewModel(
 
     val goalTextFieldState = TextFieldState()
 
+    private var lastCalculatedStep: Float = 0f
+
     private fun loadInitialData() {
         val weekEndingToday = getWeekEndingTodayMap()
+        val firstDay = weekEndingToday.entries.first().key.atStartOfDay().atZone(ZoneId.of("UTC")).toInstant()
+        val lastDay = weekEndingToday.entries.last().key.atStartOfDay().atZone(ZoneId.of("UTC")).toInstant()
         combine(
             settingPreferences.observeBackgroundAccessDisabled(),
             settingPreferences.observeProfileSettings(),
             stepTrackerManager.data,
-            stepDatasource.observeLast7Steps(),
+            stepDatasource.observeFromToSteps(firstDay, lastDay),
             aiCoach.chats
         ) { backgroundAccessDisabled, profile, data, steps, chats ->
             val stepsMap = steps.associateBy { it.date.atZone(ZoneId.of("UTC")).toLocalDate() }
@@ -93,15 +99,25 @@ class StepViewModel(
             val units = Units.valueOf(profile.units)
             val averageDailySteps = (steps.sumOf { it.steps.toDouble() } / 7).toInt()
             val chat = chats.firstOrNull()
-            val distance =
-                if (units == Units.CM) data.distance / 1000f else data.distance / 1609.34f
+            val (distance, calories) = if (lastCalculatedStep == 0f || lastCalculatedStep + 10 < data.steps) {
+                lastCalculatedStep = data.steps
+                Pair(
+                    calculateDistanceFromSteps(data.steps, profile),
+                    calculateCaloriesFromSteps(data.steps, profile)
+                )
+            } else
+                Pair(
+                    state.value.distance,
+                    state.value.calories
+                )
+
             _state.update {
                 it.copy(
                     isBackgroundAccessEnabled = backgroundAccessDisabled,
                     goal = data.goal,
                     steps = data.steps,
-                    distance = "%.1f".format(distance),
-                    calories = "%.0f".format(data.calories),
+                    distance = distance,
+                    calories = calories,
                     activeMinutes = data.activeMillis.milliseconds.inWholeMinutes.toString(),
                     units = units,
                     weeklyStats = weeklyStats,
@@ -224,6 +240,7 @@ class StepViewModel(
             _state.update {
                 val currentDate = Instant.now().truncatedTo(ChronoUnit.DAYS)
                 val date = it.date.toInstant()
+                val activeMillis = stepDatasource.getStepsByDate(date).first()?.activeMillis ?: 0
                 val steps = goalTextFieldState.text.toString().toFloatOrNull() ?: 0f
                 if (currentDate == date)
                     stepTrackerManager.editSteps(steps)
@@ -231,7 +248,8 @@ class StepViewModel(
                     Step(
                         date = date,
                         steps = steps,
-                        dailyGoal = it.goal
+                        dailyGoal = it.goal,
+                        activeMillis = activeMillis
                     )
                 )
                 it.copy(dialogVisible = Dialog.NONE)
