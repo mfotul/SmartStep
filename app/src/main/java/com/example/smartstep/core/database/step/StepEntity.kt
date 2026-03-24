@@ -1,6 +1,5 @@
 package com.example.smartstep.core.database.step
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

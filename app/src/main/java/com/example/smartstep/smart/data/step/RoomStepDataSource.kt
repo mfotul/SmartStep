@@ -6,7 +6,6 @@ import com.example.smartstep.smart.domain.step.StepDatasource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Instant
-import java.time.temporal.ChronoUnit
 
 class RoomStepDataSource(
     private val stepDao: StepDao
