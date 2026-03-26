@@ -155,7 +155,6 @@ class StepCounterService : Service(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        println("TEST onDestroy")
         sensorManager.unregisterListener(this)
         serviceScope.cancel()
         stepTrackerManager.reset()
